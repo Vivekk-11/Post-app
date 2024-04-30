@@ -1,5 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model, ObjectId } from "mongoose";
 const { Schema } = mongoose;
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  picture: string;
+  posts: ObjectId[]; // Assuming posts are represented by an array of strings
+  password: string; // Optional password field
+}
 
 const userSchema = new Schema({
   name: { required: true, type: String },
@@ -20,8 +28,9 @@ const userSchema = new Schema({
   ],
 });
 
-const User = mongoose.models.User
-  ? mongoose.models.User
-  : mongoose.model("User", userSchema);
+type UserModel = Model<IUser>;
+
+const User: UserModel =
+  mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;
