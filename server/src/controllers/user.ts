@@ -76,3 +76,27 @@ export const register: RequestHandler = async (req, res) => {
     return res.status(500).json("Something went wrong, please try again!");
   }
 };
+
+export const login: RequestHandler = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const isUser = await User.findOne({ email });
+    if (!isUser)
+      return res.status(401).json("Invalid email or password. Try again!");
+    const isPassword = await bcrypt.compare(password, isUser.password);
+    if (!isPassword)
+      return res.status(401).json("Invalid email or password. Try again!");
+
+    const token = jwt.sign({ id: isUser._id }, process.env.JWT_SECRET!);
+
+    return res.json({
+      id: isUser._id,
+      email: isUser.email,
+      name: isUser.name,
+      picture: isUser.picture,
+      token,
+    });
+  } catch (error) {
+    return res.status(500).json("Something went wrong, please try again!");
+  }
+};

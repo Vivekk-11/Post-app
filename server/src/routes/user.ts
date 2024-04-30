@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register } from "../controllers/user";
+import { register, login } from "../controllers/user";
 import { body } from "express-validator";
 import {
   uploadImage,
@@ -26,6 +26,12 @@ router.post(
       .withMessage("Password must contain at least 8 characters."),
   ],
   register
+);
+
+router.post(
+  "/login",
+  body("email").trim().isEmail().withMessage("Enter a valid email address."),
+  login
 );
 
 export default router;
