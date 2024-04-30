@@ -3,7 +3,7 @@ export interface User {
   fullName: string;
   username: string;
   email: string;
-  profilePhoto: string;
+  picture: string;
   token: string;
 }
 
