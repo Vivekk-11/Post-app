@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -32,6 +43,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: white;
+  color: black;
 }
 
 h1 {
