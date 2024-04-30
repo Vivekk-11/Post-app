@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec ts-node src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,11 @@
     "cloudinary": "^2.2.0",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.3.3"
+    "mongoose": "^8.3.3",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4"
   }
 }
