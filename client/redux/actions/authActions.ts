@@ -15,9 +15,10 @@ export const registerAction =
   async (dispatch: Dispatch) => {
     dispatch(setRegisterLoading());
     try {
-      const { data } = await axios.post(process.env.BACKEND_ROUTE!, {
-        registerData,
-      });
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_APP_BACKEND_ROUTE!}/user/register`,
+        registerData
+      );
       dispatch(setRegister(data));
       navigate("/");
     } catch (error: unknown) {
@@ -33,9 +34,10 @@ export const loginAction =
   async (dispatch: Dispatch) => {
     dispatch(setLoginLoading());
     try {
-      const { data } = await axios.post(process.env.BACKEND_ROUTE!, {
-        loginData,
-      });
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_APP_BACKEND_ROUTE!}/user/login`,
+        loginData
+      );
       dispatch(setLogin(data));
       navigate("/");
     } catch (error: unknown) {

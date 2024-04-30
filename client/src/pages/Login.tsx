@@ -1,17 +1,23 @@
 import Cookies from "js-cookie";
 import { FormEvent, useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { loginAction } from "../../redux/actions/authActions";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const { loginLoading } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    if (loginLoading) return;
     setEmailError("");
     setPasswordError("");
-    event.preventDefault();
 
     const isPasswordValid = password.trim() !== "";
     const isEmailValid =
@@ -25,55 +31,81 @@ const Login = () => {
       setPasswordError("Password should contain 8 characters!");
       return;
     }
+    dispatch(loginAction({ email, password }, navigate));
   };
 
   return (
-    <div className="p-8 shadow-lg flex flex-col items-center justify-center gap-2 w-[25rem]">
-      <h1 className="font-bold text-lg">Welcome To PostIT!</h1>
-      <p className="text-gray-500 font-semibold text-md">
-        The Best Platform To Post Stuff.
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center justify-center gap-6 w-full"
+    <div
+      className={`h-screen w-screen flex flex-col items-center justify-center`}
+    >
+      <div
+        className={`p-8 shadow-lg flex flex-col items-center justify-center gap-2 w-[25rem] ${
+          loginLoading ? "opacity-65" : "opacity-100"
+        }`}
       >
-        <h1 className="text-2xl font-bold text-gray-600">Login</h1>
-        <div className="flex flex-col items-center justify-center gap-4 w-full">
-          <div className="flex flex-col items-start gap-1 w-full">
-            {emailError && (
-              <p className="text-red-600 font-bold">{emailError}</p>
-            )}
-            <input
-              className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
-              type="email"
-              onChange={(event) => setEmail(event.target.value)}
-              value={email}
-              placeholder="Email"
-              required
-            />
+        <h1 className="font-bold text-lg">Welcome To PostIT!</h1>
+        <p className="text-gray-500 font-semibold text-md">
+          The Best Platform To Post Stuff.
+        </p>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center justify-center gap-6 w-full"
+        >
+          <h1 className="text-2xl font-bold text-gray-600">Login</h1>
+          <div className="flex flex-col items-center justify-center gap-4 w-full">
+            <div className="flex flex-col items-start gap-1 w-full">
+              {emailError && (
+                <p className="text-red-600 font-bold">{emailError}</p>
+              )}
+              <input
+                className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+                type="email"
+                onChange={(event) => {
+                  if (loginLoading) return;
+                  setEmailError("");
+                  setEmail(event.target.value);
+                }}
+                value={email}
+                placeholder="Email"
+                required
+              />
+            </div>
+            <div className="flex flex-col items-start gap-1 w-full">
+              <input
+                className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+                type="password"
+                onChange={(event) => {
+                  if (loginLoading) return;
+                  setPasswordError("");
+                  setPassword(event.target.value);
+                }}
+                value={password}
+                placeholder="Password"
+                required
+              />
+              {passwordError && (
+                <p className="text-red-500 font-bold">{passwordError}</p>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col items-start gap-1 w-full">
-            <input
-              className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
-              type="password"
-              onChange={(event) => setPassword(event.target.value)}
-              value={password}
-              placeholder="Password"
-              required
-            />
-            {passwordError && (
-              <p className="text-red-500 font-bold">{passwordError}</p>
-            )}
-          </div>
-        </div>
-        <button className="w-full hover:bg-gray-400/50">Login</button>
-      </form>
-      <p className="text-gray-600 font-semibold">
-        Don't have an account?{" "}
-        <Link to="/register" className="text-blue-600 font-bold">
-          Sign up
-        </Link>
-      </p>
+          <button
+            onClick={handleSubmit}
+            className={`${
+              loginLoading
+                ? "cursor-default outline-none opacity-60 hover:bg-[#f9f9f9]"
+                : "cursor-pointer"
+            } hover:bg-gray-400/50 w-full`}
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-gray-600 font-semibold">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-600 font-bold">
+            Sign up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
@@ -81,7 +113,6 @@ const Login = () => {
 export default Login;
 
 export const loader = () => {
-  console.log("LOGIN");
   const user = Cookies.get("postIT-user");
   if (user) return redirect("/");
   return null;
