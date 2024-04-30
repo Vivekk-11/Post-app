@@ -1,5 +1,8 @@
 import { Dispatch } from "redux";
 import {
+  setLogin,
+  setLoginError,
+  setLoginLoading,
   setRegister,
   setRegisterError,
   setRegisterLoading,
@@ -19,5 +22,23 @@ export const registerAction =
       navigate("/");
     } catch (error: unknown) {
       dispatch(setRegisterError("Something went wrong!"));
+    }
+  };
+
+export const loginAction =
+  (
+    loginData: { email: string; password: string },
+    navigate: NavigateFunction
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(setLoginLoading());
+    try {
+      const { data } = await axios.post(process.env.BACKEND_ROUTE!, {
+        loginData,
+      });
+      dispatch(setLogin(data));
+      navigate("/");
+    } catch (error: unknown) {
+      dispatch(setLoginError("Something went wrong!"));
     }
   };

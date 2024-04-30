@@ -2,12 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { AuthSlice, User } from "../../types/user";
 const userFromCookie = Cookies.get("postIT-user");
-const user: User | null = userFromCookie ? JSON.parse(userFromCookie) : null;
+const user: User | null = !userFromCookie ? null : JSON.parse(userFromCookie);
 
 const initialState: AuthSlice = {
-  registerLoading: false,
   user,
+  registerLoading: false,
   registerError: null,
+  loginLoading: false,
+  loginError: null,
 };
 
 const authSlice = createSlice({
@@ -22,16 +24,44 @@ const authSlice = createSlice({
       state.registerLoading = false;
       state.registerError = null;
       state.user = payload;
-      Cookies.set("postIT-user", JSON.stringify(payload));
+      Cookies.set("postIT-user", JSON.stringify(payload), {
+        secure: true,
+        sameSite: "strict",
+        expires: 30,
+      });
     },
     setRegisterError: (state, { payload }: { payload: string }) => {
       state.registerLoading = false;
       state.registerError = payload;
     },
+    setLoginLoading: (state) => {
+      state.loginLoading = true;
+      state.loginError = null;
+    },
+    setLogin: (state, { payload }: { payload: User }) => {
+      state.loginLoading = false;
+      state.loginError = null;
+      state.user = payload;
+      Cookies.set("postIT-user", JSON.stringify(payload), {
+        secure: true,
+        sameSite: "strict",
+        expires: 30,
+      });
+    },
+    setLoginError: (state, { payload }: { payload: string }) => {
+      state.loginLoading = false;
+      state.loginError = payload;
+    },
   },
 });
 
-export const { setRegisterLoading, setRegister, setRegisterError } =
-  authSlice.actions;
+export const {
+  setRegisterLoading,
+  setRegister,
+  setRegisterError,
+  setLogin,
+  setLoginError,
+  setLoginLoading,
+} = authSlice.actions;
 
 export default authSlice.reducer;

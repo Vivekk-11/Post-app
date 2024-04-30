@@ -11,4 +11,6 @@ export interface AuthSlice {
   user: User | null;
   registerLoading: boolean;
   registerError: string | null;
+  loginLoading: boolean;
+  loginError: string | null;
 }

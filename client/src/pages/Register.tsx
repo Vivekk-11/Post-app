@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { FormEvent, useRef, useState } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { registerAction } from "../../redux/actions/authActions";
 import { CgProfile } from "react-icons/cg";
@@ -79,7 +79,7 @@ const Register = () => {
         onSubmit={handleSubmit}
         className="flex flex-col items-center justify-center gap-6 w-full"
       >
-        <h1 className="text-3xl font-bold text-gray-600">Sign Up</h1>
+        <h1 className="text-2xl font-bold text-gray-600">Sign Up</h1>
         <div className="flex flex-col items-center justify-center gap-4 w-full">
           <div className="flex flex-col items-start gap-1 w-full">
             {nameError && <p className="text-red-600 font-bold">{nameError}</p>}
@@ -193,6 +193,12 @@ const Register = () => {
           Sign up
         </button>
       </form>
+      <p className="self-start text-gray-600 font-semibold my-2">
+        Already have an account?{" "}
+        <Link to="/login" className="text-blue-600 font-bold">
+          Sign in
+        </Link>
+      </p>
     </div>
   );
 };
