@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { AuthSlice, User } from "../../types/user";
-const userFromCookie = Cookies.get("clips-user");
+const userFromCookie = Cookies.get("postIT-user");
 const user: User | null = userFromCookie ? JSON.parse(userFromCookie) : null;
 
 const initialState: AuthSlice = {
