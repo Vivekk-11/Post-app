@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import {
+  setIsDeleteAccount,
   setLogin,
   setLoginError,
   setLoginLoading,
@@ -43,4 +44,9 @@ export const loginAction =
     } catch (error: unknown) {
       dispatch(setLoginError("Something went wrong!"));
     }
+  };
+
+export const isDeleteAccountAction =
+  (value: boolean) => (dispatch: Dispatch) => {
+    dispatch(setIsDeleteAccount(value));
   };

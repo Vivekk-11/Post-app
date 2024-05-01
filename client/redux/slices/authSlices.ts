@@ -10,6 +10,7 @@ const initialState: AuthSlice = {
   registerError: null,
   loginLoading: false,
   loginError: null,
+  isDeleteAccount: false,
 };
 
 const authSlice = createSlice({
@@ -52,6 +53,9 @@ const authSlice = createSlice({
       state.loginLoading = false;
       state.loginError = payload;
     },
+    setIsDeleteAccount: (state, { payload }: { payload: boolean }) => {
+      state.isDeleteAccount = payload;
+    },
   },
 });
 
@@ -62,6 +66,7 @@ export const {
   setLogin,
   setLoginError,
   setLoginLoading,
+  setIsDeleteAccount,
 } = authSlice.actions;
 
 export default authSlice.reducer;

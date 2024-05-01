@@ -1,11 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ChangeEvent, useRef, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { CiLogout } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useClickOutside from "../../hooks/useClickOutside";
+import { setIsDeleteAccount } from "../../redux/slices/authSlices";
 
 export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -14,10 +15,8 @@ export const Header = () => {
   const divRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   useClickOutside(divRef, () => setIsProfileClicked(false));
-  const navigate = useNavigate();
-  const addPost = () => {
-    // TODO: add Post
-  };
+  const dispatch = useAppDispatch();
+
   const changeProfileHandler = () => {
     fileRef?.current?.click();
     setIsProfileClicked(false);
@@ -29,9 +28,15 @@ export const Header = () => {
     }
   };
 
+  const addPost = () => {
+    // TODO: add Post
+  };
+
   const logoutHandler = () => {};
 
-  const deleteAccountHandler = () => {};
+  const deleteAccountHandler = () => {
+    dispatch(setIsDeleteAccount(true));
+  };
 
   return (
     <header className="h-[3rem] w-full flex items-center justify-between">
@@ -43,7 +48,7 @@ export const Header = () => {
         />
         <h3 className="text-2xl font-extrabold">PostIT</h3>
       </Link>
-      {user ? (
+      {user && (
         <div className="flex items-center gap-x-10">
           <IoIosAdd onClick={addPost} className="cursor-pointer" size={60} />
           <div
@@ -95,21 +100,6 @@ export const Header = () => {
               </div>
             )}
           </div>
-        </div>
-      ) : (
-        <div className="flex items-center gap-x-5">
-          <button
-            onClick={() => navigate("/login")}
-            className="text-[#1a1a1a] bg-[#f9f9f9] hover:bg-[#213547] hover:text-[#ffffff]"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => navigate("/register")}
-            className="bg-[#213547] text-[#ffffff] hover:text-[#1a1a1a] hover:bg-[#f9f9f9]"
-          >
-            Sign up
-          </button>
         </div>
       )}
     </header>

@@ -13,4 +13,5 @@ export interface AuthSlice {
   registerError: string | null;
   loginLoading: boolean;
   loginError: string | null;
+  isDeleteAccount: boolean;
 }
