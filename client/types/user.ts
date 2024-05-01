@@ -20,4 +20,6 @@ export interface AuthSlice {
   updateProfileError: null | string;
   isAccountSettings: boolean;
   isResetPassword: boolean;
+  resetPasswordLoading: boolean;
+  resetPasswordError: null | string;
 }

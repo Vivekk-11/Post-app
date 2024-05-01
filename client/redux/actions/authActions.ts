@@ -14,6 +14,9 @@ import {
   setRegister,
   setRegisterError,
   setRegisterLoading,
+  setResetPassword,
+  setResetPasswordError,
+  setResetPasswordLoading,
   setUpdateProfile,
   setUpdateProfileError,
   setUpdateProfileLoading,
@@ -121,4 +124,26 @@ export const isAccountSettingsAction =
 export const isResetPasswordAction =
   (value: boolean) => (dispatch: Dispatch) => {
     dispatch(setIsResetPassword(value));
+  };
+
+export const resetPasswordAction =
+  (password: string) => async (dispatch: Dispatch) => {
+    try {
+      dispatch(setResetPasswordLoading());
+      const user = Cookies.get("postIT-user");
+      if (!user) return;
+      const { token } = JSON.parse(user);
+      await axios.put(
+        `${import.meta.env.VITE_APP_BACKEND_ROUTE}/user/reset-password`,
+        { password },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch(setResetPassword());
+    } catch (error) {
+      dispatch(setResetPasswordError("Something went wrong!"));
+    }
   };

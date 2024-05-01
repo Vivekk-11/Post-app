@@ -17,6 +17,8 @@ const initialState: AuthSlice = {
   updateProfileError: null,
   isAccountSettings: false,
   isResetPassword: false,
+  resetPasswordLoading: false,
+  resetPasswordError: null,
 };
 
 const authSlice = createSlice({
@@ -112,6 +114,19 @@ const authSlice = createSlice({
       state.isResetPassword = payload;
       state.isAccountSettings = false;
     },
+    setResetPasswordLoading: (state) => {
+      state.resetPasswordLoading = true;
+      state.resetPasswordError = null;
+    },
+    setResetPassword: (state) => {
+      state.resetPasswordLoading = false;
+      state.isResetPassword = false;
+      state.resetPasswordError = null;
+    },
+    setResetPasswordError: (state, { payload }: { payload: string }) => {
+      state.resetPasswordLoading = false;
+      state.resetPasswordError = payload;
+    },
   },
 });
 
@@ -132,6 +147,9 @@ export const {
   setUpdateProfileLoading,
   setIsAccountSettings,
   setIsResetPassword,
+  setResetPassword,
+  setResetPasswordError,
+  setResetPasswordLoading,
 } = authSlice.actions;
 
 export default authSlice.reducer;
