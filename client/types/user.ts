@@ -16,4 +16,6 @@ export interface AuthSlice {
   isDeleteAccount: boolean;
   deleteAccountLoading: boolean;
   deleteAccountError: null | string;
+  updateProfileLoading: boolean;
+  updateProfileError: null | string;
 }

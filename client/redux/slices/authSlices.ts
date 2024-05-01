@@ -13,6 +13,8 @@ const initialState: AuthSlice = {
   isDeleteAccount: false,
   deleteAccountLoading: false,
   deleteAccountError: null,
+  updateProfileLoading: false,
+  updateProfileError: null,
 };
 
 const authSlice = createSlice({
@@ -77,6 +79,28 @@ const authSlice = createSlice({
       state.deleteAccountLoading = false;
       state.deleteAccountError = payload;
     },
+    setUpdateProfileLoading: (state) => {
+      state.updateProfileLoading = true;
+      state.updateProfileError = null;
+    },
+    setUpdateProfile: (state, { payload }: { payload: string }) => {
+      state.updateProfileLoading = false;
+      state.updateProfileError = null;
+      if (state.user) {
+        const newUser = { ...state.user, picture: payload };
+        state.user = newUser;
+        Cookies.remove("postIT-user");
+        Cookies.set("postIT-user", JSON.stringify(newUser), {
+          secure: true,
+          sameSite: "strict",
+          expires: 30,
+        });
+      }
+    },
+    setUpdateProfileError: (state, { payload }: { payload: string }) => {
+      state.updateProfileLoading = false;
+      state.updateProfileError = payload;
+    },
   },
 });
 
@@ -92,6 +116,9 @@ export const {
   setDeleteAccount,
   setDeleteAccountError,
   setDeleteAccountLoading,
+  setUpdateProfile,
+  setUpdateProfileError,
+  setUpdateProfileLoading,
 } = authSlice.actions;
 
 export default authSlice.reducer;

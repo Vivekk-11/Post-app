@@ -12,6 +12,9 @@ import {
   setRegister,
   setRegisterError,
   setRegisterLoading,
+  setUpdateProfile,
+  setUpdateProfileError,
+  setUpdateProfileLoading,
 } from "../slices/authSlices";
 import axios from "axios";
 import { NavigateFunction } from "react-router-dom";
@@ -83,5 +86,27 @@ export const deleteAccountAction =
       dispatch(setDeleteAccount());
     } catch (error) {
       dispatch(setDeleteAccountError("Something went wrong!"));
+    }
+  };
+
+export const updateProfileAction =
+  (values: FormData) => async (dispatch: Dispatch) => {
+    try {
+      dispatch(setUpdateProfileLoading());
+      const user = Cookies.get("postIT-user");
+      if (!user) return;
+      const { token } = JSON.parse(user);
+      const { data } = await axios.put(
+        `${import.meta.env.VITE_APP_BACKEND_ROUTE}/user/update-profile`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch(setUpdateProfile(data));
+    } catch (error) {
+      dispatch(setUpdateProfileError("Something went wrong!"));
     }
   };

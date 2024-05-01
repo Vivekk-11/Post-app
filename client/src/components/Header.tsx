@@ -9,11 +9,12 @@ import useClickOutside from "../../hooks/useClickOutside";
 import {
   isDeleteAccountAction,
   logoutAction,
+  updateProfileAction,
 } from "../../redux/actions/authActions";
 import { isCreatePostAction } from "../../redux/actions/postActions";
 
 export const Header = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, updateProfileLoading } = useAppSelector((state) => state.auth);
   const [isProfileClicked, setIsProfileClicked] = useState(false);
   const [profilePicture, setProfilePicture] = useState("");
   const divRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,9 @@ export const Header = () => {
     if (event?.target?.files?.[0]) {
       //@ts-expect-error ignore typescript
       setProfilePicture(event.target.files[0]);
+      const value = new FormData();
+      value.append("profileImage", event.target.files[0]);
+      dispatch(updateProfileAction(value));
     }
   };
 
@@ -62,10 +66,15 @@ export const Header = () => {
           <IoIosAdd onClick={addPost} className="cursor-pointer" size={60} />
           <div
             ref={divRef}
-            className="flex flex-col items-center justify-center relative cursor-pointer"
+            className={`flex flex-col items-center justify-center relative ${
+              updateProfileLoading
+                ? "cursor-default opacity-65"
+                : "cursor-pointer opacity-100"
+            }`}
           >
             <img
               onClick={() => {
+                if (updateProfileLoading) return;
                 setIsProfileClicked(!isProfileClicked);
               }}
               src={
@@ -75,7 +84,11 @@ export const Header = () => {
                   : user?.picture
               }
               alt=""
-              className={`h-10 w-10 mobile:h-8 mobile:w-8 object-cover rounded-full `}
+              className={`h-10 w-10 mobile:h-8 mobile:w-8 object-cover rounded-full ${
+                updateProfileLoading
+                  ? "cursor-default opacity-65"
+                  : "cursor-pointer opacity-100"
+              }`}
             />
             {isProfileClicked && (
               <div className="bg-white w-44 shadow-lg px-2 py-2 z-20 absolute top-12 -left-3 flex flex-col items-start justify-start gap-1">
