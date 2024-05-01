@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import cloudinary from "cloudinary";
 import streamifier from "streamifier";
 import mongoose from "mongoose";
+import Post from "../models/Post";
 
 export const register: RequestHandler = async (req, res) => {
   try {
@@ -156,6 +157,7 @@ export const deleteAccount: RequestHandler = async (req, res) => {
     }
 
     await User.deleteOne({ _id: new mongoose.Types.ObjectId(userId) });
+    await Post.deleteMany({ creator: new mongoose.Types.ObjectId(userId) });
 
     return res.json("You successfully deleted your account!");
   } catch (error) {
