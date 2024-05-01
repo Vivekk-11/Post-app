@@ -30,12 +30,17 @@ export const createPost: RequestHandler = async (req, res) => {
           return res
             .status(500)
             .json("Something went wrong, please try again!");
-        const post = await Post.create({
+        const createdPost = await Post.create({
           title,
           description,
           image: result.secure_url,
           creator: userId,
         });
+
+        const post = await Post.findById(createdPost._id).populate(
+          "creator",
+          "name picture email"
+        );
 
         return res.json(post);
       }
@@ -56,7 +61,9 @@ export const getPosts: RequestHandler = async (req, res) => {
       .skip(+pageNo * +limit)
       .limit(+limit)
       .populate("creator", "name email picture");
-    return res.json(posts);
+
+    const documentCount = await Post.countDocuments();
+    return res.json({ posts, postsCount: documentCount });
   } catch (error) {
     return res.status(500).json("Something went wrong, please try again!");
   }

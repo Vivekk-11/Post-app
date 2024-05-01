@@ -109,7 +109,7 @@ const CreatePostModal = () => {
             <input
               ref={fileRef}
               type="file"
-              accept="image/jpg, image/jpeg, image/png"
+              accept=".jpg, .jpeg, .png"
               hidden
               onChange={(event) => {
                 if (createPostLoading) return;

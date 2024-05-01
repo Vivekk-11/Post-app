@@ -20,4 +20,5 @@ export interface PostSlice {
   getPostsLoading: boolean;
   getPostsError: null | string;
   posts: Post[] | [];
+  postsCount: number;
 }

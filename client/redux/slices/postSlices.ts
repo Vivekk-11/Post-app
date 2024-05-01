@@ -8,6 +8,7 @@ const initialState: PostSlice = {
   getPostsLoading: false,
   getPostsError: null,
   posts: [],
+  postsCount: 0,
 };
 
 const postSlice = createSlice({
@@ -21,10 +22,11 @@ const postSlice = createSlice({
       state.createPostLoading = true;
       state.createPostError = null;
     },
-    setCreatePost: (state) => {
+    setCreatePost: (state, { payload }: { payload: Post }) => {
       state.createPostLoading = false;
       state.createPostError = null;
       state.isCreatePost = false;
+      state.posts = [payload, ...state.posts];
     },
     setCreatePostError: (state, { payload }: { payload: string }) => {
       state.createPostLoading = false;
@@ -34,9 +36,15 @@ const postSlice = createSlice({
       state.getPostsLoading = true;
       state.getPostsError = null;
     },
-    setPosts: (state, { payload }: { payload: Post[] }) => {
+    setPosts: (
+      state,
+      {
+        payload: { posts, postsCount },
+      }: { payload: { posts: Post[]; postsCount: number } }
+    ) => {
       state.getPostsLoading = false;
-      state.posts = payload;
+      state.posts = posts;
+      state.postsCount = postsCount;
       state.getPostsError = null;
     },
     setPostsError: (state, { payload }: { payload: string }) => {

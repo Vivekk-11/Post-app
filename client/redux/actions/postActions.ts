@@ -31,7 +31,7 @@ export const createPostAction =
           },
         }
       );
-      dispatch(setCreatePost());
+      dispatch(setCreatePost(data));
     } catch (error) {
       dispatch(setCreatePostError("Something went wrong!"));
     }
@@ -53,7 +53,7 @@ export const getPostsAction =
           },
         }
       );
-      dispatch(setPosts(data));
+      dispatch(setPosts({ posts: data.posts, postsCount: data.postsCount }));
     } catch (error) {
       dispatch(setPostsError("Something went wrong!"));
     }
