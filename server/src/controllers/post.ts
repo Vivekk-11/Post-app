@@ -61,3 +61,16 @@ export const getPosts: RequestHandler = async (req, res) => {
     return res.status(500).json("Something went wrong, please try again!");
   }
 };
+
+export const searchPosts: RequestHandler = async (req, res) => {
+  try {
+    const { title } = req.query;
+    if (!title) return res.status(403).json("Invalid request.");
+    const posts = await Post.find({
+      title: { $regex: title, $options: "i" },
+    }).populate("creator", "name email picture");
+    return res.json(posts);
+  } catch (error) {
+    return res.status(500).json("Something went wrong, please try again!");
+  }
+};
