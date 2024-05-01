@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import classes from "./modal.module.css";
+import { useAppSelector } from "../../../hooks/reduxHooks";
 
 const Modal = ({ children }: { children: React.ReactNode }) => {
   return <div className={classes.modal}>{children}</div>;
@@ -17,6 +18,7 @@ const ModalOverlay = ({
   children: React.ReactNode;
   onClose: () => void;
 }) => {
+  const { createPostLoading } = useAppSelector((state) => state.post);
   return (
     <Fragment>
       {ReactDOM.createPortal(
@@ -25,7 +27,7 @@ const ModalOverlay = ({
         document.getElementById("modal")
       )}
       {ReactDOM.createPortal(
-        <Overlay onClose={onClose} />,
+        <Overlay onClose={createPostLoading ? () => {} : onClose} />,
         //@ts-expect-error below line might throw an error
         document.getElementById("backdrop")
       )}
