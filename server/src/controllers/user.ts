@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "cloudinary";
 import streamifier from "streamifier";
+import mongoose from "mongoose";
 
 export const register: RequestHandler = async (req, res) => {
   try {
@@ -133,5 +134,31 @@ export const updateProfile: RequestHandler = async (req, res) => {
     uploadStream.end();
   } catch (error) {
     return res.status(500).json("Something went wrong, please try again!");
+  }
+};
+
+export const deleteAccount: RequestHandler = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    //@ts-ignore
+    if (userId.toString() !== req.user.id.toString()) {
+      return res
+        .status(401)
+        .json("You are not authorized to delete this account!");
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(400)
+        .json("Something went wrong, please try again later!");
+    }
+
+    await User.deleteOne({ _id: new mongoose.Types.ObjectId(userId) });
+
+    return res.json("You successfully deleted your account!");
+  } catch (error) {
+    res.status(500).json("Something went wrong, please try again!");
   }
 };

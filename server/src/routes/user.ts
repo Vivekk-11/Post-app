@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { register, login, updateProfile } from "../controllers/user";
+import {
+  register,
+  login,
+  updateProfile,
+  deleteAccount,
+} from "../controllers/user";
 import { body } from "express-validator";
 import {
   uploadImage,
@@ -43,5 +48,7 @@ router.put(
   validateUpdateProfileImage,
   updateProfile
 );
+
+router.delete("/delete-account/:userId", verifyToken, deleteAccount);
 
 export default router;
