@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import userRoutes from "./routes/user";
+import postRoutes from "./routes/post";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 
@@ -20,6 +21,7 @@ cloudinary.v2.config({
 });
 
 app.use("/api/user", userRoutes);
+app.use("/api/post", postRoutes);
 
 const PORT = process.env.PORT || 8080;
 
