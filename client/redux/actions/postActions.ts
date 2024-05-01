@@ -8,6 +8,9 @@ import {
   setPosts,
   setPostsError,
   setPostsLoading,
+  setSearchPosts,
+  setSearchPostsError,
+  setSearchPostsLoading,
 } from "../slices/postSlices";
 import axios from "axios";
 
@@ -56,5 +59,28 @@ export const getPostsAction =
       dispatch(setPosts({ posts: data.posts, postsCount: data.postsCount }));
     } catch (error) {
       dispatch(setPostsError("Something went wrong!"));
+    }
+  };
+
+export const searchPostsAction =
+  (searchTerm: string) => async (dispatch: Dispatch) => {
+    try {
+      const user = Cookies.get("postIT-user");
+      if (!user) return;
+      const { token } = JSON.parse(user);
+      dispatch(setSearchPostsLoading());
+      console.log(searchTerm, "TERM");
+      const { data } = await axios.get(
+        `${import.meta.env
+          .VITE_APP_BACKEND_ROUTE!}/post/search?title=${searchTerm}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch(setSearchPosts(data));
+    } catch (error) {
+      dispatch(setSearchPostsError("Something went wrong!"));
     }
   };

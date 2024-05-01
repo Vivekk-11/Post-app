@@ -21,4 +21,7 @@ export interface PostSlice {
   getPostsError: null | string;
   posts: Post[] | [];
   postsCount: number;
+  searchPostsLoading: boolean;
+  searchPosts: Post[] | [];
+  searchPostsError: null | string;
 }

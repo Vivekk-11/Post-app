@@ -9,6 +9,9 @@ const initialState: PostSlice = {
   getPostsError: null,
   posts: [],
   postsCount: 0,
+  searchPosts: [],
+  searchPostsLoading: false,
+  searchPostsError: null,
 };
 
 const postSlice = createSlice({
@@ -51,6 +54,20 @@ const postSlice = createSlice({
       state.getPostsLoading = false;
       state.getPostsError = payload;
     },
+    setSearchPostsLoading: (state) => {
+      state.searchPostsLoading = true;
+      state.searchPostsError = null;
+      state.searchPosts = [];
+    },
+    setSearchPosts: (state, { payload }: { payload: Post[] }) => {
+      state.searchPostsLoading = false;
+      state.searchPosts = payload;
+      state.searchPostsError = null;
+    },
+    setSearchPostsError: (state, { payload }: { payload: string }) => {
+      state.searchPostsLoading = false;
+      state.searchPostsError = payload;
+    },
   },
 });
 
@@ -62,5 +79,8 @@ export const {
   setPosts,
   setPostsError,
   setPostsLoading,
+  setSearchPosts,
+  setSearchPostsError,
+  setSearchPostsLoading,
 } = postSlice.actions;
 export default postSlice.reducer;
