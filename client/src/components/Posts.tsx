@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { getPostsAction } from "../../redux/actions/postActions";
+import Post from "./Post";
 
 const Posts = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -52,7 +53,18 @@ const Posts = () => {
 
   return (
     <div className="grid grid-cols-4 gap-3 my-5 mx-3 tab:gap-5 tab:grid-cols-3 xs:grid xs:grid-cols-1 xs:grid-rows-3">
-      {posts.map((post) => post._id)}
+      {posts.map((post) => (
+        <Post
+          key={post._id}
+          title={post.title}
+          description={post.description}
+          image={post.image}
+          userPicture={post.creator.picture}
+          username={post.creator.name}
+          userId={post.creator._id}
+          createdAt={post.createdAt}
+        />
+      ))}
     </div>
   );
 };
