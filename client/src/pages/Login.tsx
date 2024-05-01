@@ -43,7 +43,10 @@ const Login = () => {
           loginLoading ? "opacity-65" : "opacity-100"
         }`}
       >
-        <h1 className="font-bold text-lg">Welcome To PostIT!</h1>
+        <div className="flex items-center justify-center gap-x-1">
+          <img src="/header-logo.webp" className="h-8 w-8 object-cover" />
+          <h1 className="font-bold text-lg">Welcome To PostIT!</h1>
+        </div>
         <p className="text-gray-500 font-semibold text-md">
           The Best Platform To Post Stuff.
         </p>

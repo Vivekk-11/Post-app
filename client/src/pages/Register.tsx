@@ -15,9 +15,7 @@ const Register = () => {
   const [nameError, setNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [profileImage, setProfileImage] = useState<Blob | MediaSource | null>(
-    null
-  );
+  const [profileImage, setProfileImage] = useState("");
   const { registerLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,10 +54,7 @@ const Register = () => {
     values.append("name", name);
     values.append("email", email);
     values.append("password", password);
-    if (
-      profileImage &&
-      (typeof profileImage === "string" || profileImage instanceof Blob)
-    ) {
+    if (profileImage && typeof profileImage === "string") {
       values.append("profileImage", profileImage);
     }
     dispatch(registerAction(values, navigate));
@@ -74,7 +69,10 @@ const Register = () => {
           registerLoading ? "opacity-65" : "opacity-100"
         }`}
       >
-        <h1 className="font-bold text-lg">Welcome To PostIT!</h1>
+        <div className="flex items-center justify-center gap-x-1">
+          <img src="/header-logo.webp" className="h-8 w-8 object-cover" />
+          <h1 className="font-bold text-lg">Welcome To PostIT!</h1>
+        </div>
         <p className="text-gray-500 font-semibold text-md">
           The Best Platform To Post Stuff.
         </p>
@@ -171,7 +169,7 @@ const Register = () => {
                   <div
                     onClick={() => {
                       if (registerLoading) return;
-                      setProfileImage(null);
+                      setProfileImage("");
                     }}
                     className={`${
                       registerLoading ? "opacity-65" : "opacity-100"
@@ -187,6 +185,7 @@ const Register = () => {
                     className={`w-10 h-10 rounded-full object-cover cursor-pointer ${
                       registerLoading ? "opacity-65" : "opacity-100"
                     }`}
+                    //@ts-expect-error ignore typescript
                     src={URL.createObjectURL(profileImage)}
                   />
                 </>
@@ -194,7 +193,8 @@ const Register = () => {
               <input
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   if (event?.target?.files?.[0]) {
-                    setProfileImage(event.target.files[0] as Blob);
+                    //@ts-expect-error ignore typescript
+                    setProfileImage(event.target.files[0]);
                   }
                 }}
                 accept=".jpg, .jpeg, .png"
