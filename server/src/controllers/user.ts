@@ -164,3 +164,27 @@ export const deleteAccount: RequestHandler = async (req, res) => {
     res.status(500).json("Something went wrong, please try again!");
   }
 };
+
+export const resetPassword: RequestHandler = async (req, res) => {
+  try {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(423).json(error.array()[0].msg);
+    }
+    //@ts-ignore
+    const user = await User.findById(req.user.id);
+
+    if (!user) return res.status(401).json("Unauthorized!");
+
+    const { password } = req.body;
+    const isSamePass = await bcrypt.compare(password, user.password);
+    if (isSamePass) return res.status(401).json("Please enter a new password!");
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.json("You successfully changed your password!");
+  } catch (error) {
+    res.status(500).json("Something went wrong, please try again!");
+  }
+};

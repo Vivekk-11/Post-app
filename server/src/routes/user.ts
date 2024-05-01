@@ -4,6 +4,7 @@ import {
   login,
   updateProfile,
   deleteAccount,
+  resetPassword,
 } from "../controllers/user";
 import { body } from "express-validator";
 import {
@@ -47,6 +48,17 @@ router.put(
   uploadImage.single("profileImage"),
   validateUpdateProfileImage,
   updateProfile
+);
+
+router.put(
+  "/reset-password",
+  verifyToken,
+  body("password")
+    .trim()
+    .isString()
+    .isLength({ min: 8, max: 30 })
+    .withMessage("Password must contain at least 8 characters."),
+  resetPassword
 );
 
 router.delete("/delete-account/:userId", verifyToken, deleteAccount);
