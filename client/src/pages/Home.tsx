@@ -2,6 +2,7 @@ import { IoMdSearch } from "react-icons/io";
 import { FormEvent, useState } from "react";
 import Cookies from "js-cookie";
 import { redirect } from "react-router-dom";
+import Posts from "../components/Posts";
 
 const Home = () => {
   const [showSearch, setShowSearch] = useState(true);
@@ -30,6 +31,7 @@ const Home = () => {
           />
         </form>
       </div>
+      <Posts />
     </div>
   );
 };

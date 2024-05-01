@@ -5,6 +5,9 @@ import {
   setCreatePostError,
   setCreatePostLoading,
   setIsCreatePost,
+  setPosts,
+  setPostsError,
+  setPostsLoading,
 } from "../slices/postSlices";
 import axios from "axios";
 
@@ -31,5 +34,27 @@ export const createPostAction =
       dispatch(setCreatePost());
     } catch (error) {
       dispatch(setCreatePostError("Something went wrong!"));
+    }
+  };
+
+export const getPostsAction =
+  (pageNo: number, limit: number) => async (dispatch: Dispatch) => {
+    try {
+      const user = Cookies.get("postIT-user");
+      if (!user) return;
+      const { token } = JSON.parse(user);
+      dispatch(setPostsLoading());
+      const { data } = await axios.get(
+        `${import.meta.env
+          .VITE_APP_BACKEND_ROUTE!}/post/get-posts?pageNo=${pageNo}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      dispatch(setPosts(data));
+    } catch (error) {
+      dispatch(setPostsError("Something went wrong!"));
     }
   };

@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PostSlice } from "../../types/post";
+import { Post, PostSlice } from "../../types/post";
 
 const initialState: PostSlice = {
   isCreatePost: false,
   createPostLoading: false,
   createPostError: null,
+  getPostsLoading: false,
+  getPostsError: null,
+  posts: [],
 };
 
 const postSlice = createSlice({
@@ -27,6 +30,19 @@ const postSlice = createSlice({
       state.createPostLoading = false;
       state.createPostError = payload;
     },
+    setPostsLoading: (state) => {
+      state.getPostsLoading = true;
+      state.getPostsError = null;
+    },
+    setPosts: (state, { payload }: { payload: Post[] }) => {
+      state.getPostsLoading = false;
+      state.posts = payload;
+      state.getPostsError = null;
+    },
+    setPostsError: (state, { payload }: { payload: string }) => {
+      state.getPostsLoading = false;
+      state.getPostsError = payload;
+    },
   },
 });
 
@@ -35,5 +51,8 @@ export const {
   setCreatePostError,
   setCreatePost,
   setCreatePostLoading,
+  setPosts,
+  setPostsError,
+  setPostsLoading,
 } = postSlice.actions;
 export default postSlice.reducer;
