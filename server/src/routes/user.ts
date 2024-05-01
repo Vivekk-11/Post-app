@@ -11,7 +11,7 @@ import {
   validateRegisterProfileImage,
   validateUpdateProfileImage,
 } from "../middlewares/uploadImage";
-import verifyToken from "../middlewares/verifytoken";
+import verifyToken from "../middlewares/verifyToken";
 
 const router = Router();
 
