@@ -100,3 +100,38 @@ export const login: RequestHandler = async (req, res) => {
     return res.status(500).json("Something went wrong, please try again!");
   }
 };
+
+export const updateProfile: RequestHandler = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json("Please provide an image!");
+    }
+
+    //@ts-ignore
+    const user: IUser | null = await User.findById(req?.user?.id);
+    if (!user) return res.status(401).json("Unauthorized!");
+    const bufferStream = streamifier.createReadStream(req.file.buffer);
+    const uploadStream = cloudinary.v2.uploader.upload_stream(
+      bufferStream,
+      async (error, result) => {
+        if (error) {
+          return res
+            .status(500)
+            .json("Something went wrong, please try again!");
+        }
+        if (!result?.secure_url)
+          return res
+            .status(500)
+            .json("Something went wrong, please try again!");
+        user.picture = result.secure_url;
+        await user.save();
+
+        return res.json(result.secure_url);
+      }
+    );
+    uploadStream.write(req.file.buffer);
+    uploadStream.end();
+  } catch (error) {
+    return res.status(500).json("Something went wrong, please try again!");
+  }
+};

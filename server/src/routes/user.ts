@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { register, login } from "../controllers/user";
+import { register, login, updateProfile } from "../controllers/user";
 import { body } from "express-validator";
 import {
   uploadImage,
   validateRegisterProfileImage,
+  validateUpdateProfileImage,
 } from "../middlewares/uploadImage";
+import verifyToken from "../middlewares/verifytoken";
 
 const router = Router();
 
@@ -32,6 +34,14 @@ router.post(
   "/login",
   body("email").trim().isEmail().withMessage("Enter a valid email address."),
   login
+);
+
+router.put(
+  "/update-profile",
+  verifyToken,
+  uploadImage.single("profileImage"),
+  validateUpdateProfileImage,
+  updateProfile
 );
 
 export default router;
