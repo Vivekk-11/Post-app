@@ -2,8 +2,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import Register, { loader as registerLoader } from "./pages/Register";
 import Login, { loader as loginLoader } from "./pages/Login";
-import Home from "./pages/Home";
-import Root from "./pages/Root";
+import Home, { loader as homeLoader } from "./pages/Home";
+import Root, { loader as rootLoader } from "./pages/Root";
 
 const router = createBrowserRouter([
   { path: "/register", element: <Register />, loader: registerLoader },
@@ -11,7 +11,8 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    children: [{ index: true, element: <Home /> }],
+    loader: rootLoader,
+    children: [{ index: true, element: <Home />, loader: homeLoader }],
   },
 ]);
 

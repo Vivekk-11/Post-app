@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ChangeEvent, useRef, useState } from "react";
@@ -6,25 +6,30 @@ import { CgProfile } from "react-icons/cg";
 import { CiLogout } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useClickOutside from "../../hooks/useClickOutside";
-import { isDeleteAccountAction } from "../../redux/actions/authActions";
+import {
+  isDeleteAccountAction,
+  logoutAction,
+} from "../../redux/actions/authActions";
 import { isCreatePostAction } from "../../redux/actions/postActions";
 
 export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [isProfileClicked, setIsProfileClicked] = useState(false);
-  const [profilePicture, setProfilePicture] = useState<Blob | null>(null);
+  const [profilePicture, setProfilePicture] = useState("");
   const divRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   useClickOutside(divRef, () => setIsProfileClicked(false));
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const changeProfileHandler = () => {
     fileRef?.current?.click();
-    setIsProfileClicked(false);
   };
 
   const changeImageHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
+    setIsProfileClicked(false);
+    if (event?.target?.files?.[0]) {
+      //@ts-expect-error ignore typescript
       setProfilePicture(event.target.files[0]);
     }
   };
@@ -33,11 +38,16 @@ export const Header = () => {
     dispatch(isCreatePostAction(true));
   };
 
-  const logoutHandler = () => {};
+  const logoutHandler = () => {
+    if (!user) return;
+    dispatch(logoutAction(navigate));
+  };
 
   const deleteAccountHandler = () => {
     dispatch(isDeleteAccountAction(true));
   };
+
+  console.log(profilePicture, "PROFILE PICTURE");
 
   return (
     <header className="h-[3rem] w-full flex items-center justify-between">
@@ -62,7 +72,8 @@ export const Header = () => {
               }}
               src={
                 profilePicture
-                  ? URL.createObjectURL(profilePicture)
+                  ? //@ts-expect-error ignore typescript
+                    URL.createObjectURL(profilePicture)
                   : user?.picture
               }
               alt=""

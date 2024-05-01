@@ -4,6 +4,7 @@ import {
   setLogin,
   setLoginError,
   setLoginLoading,
+  setLogout,
   setRegister,
   setRegisterError,
   setRegisterLoading,
@@ -49,4 +50,10 @@ export const loginAction =
 export const isDeleteAccountAction =
   (value: boolean) => (dispatch: Dispatch) => {
     dispatch(setIsDeleteAccount(value));
+  };
+
+export const logoutAction =
+  (navigate: NavigateFunction) => (dispatch: Dispatch) => {
+    dispatch(setLogout());
+    navigate("/login");
   };

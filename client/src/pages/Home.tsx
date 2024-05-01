@@ -1,5 +1,8 @@
 import { IoMdSearch } from "react-icons/io";
 import { FormEvent, useState } from "react";
+import Cookies from "js-cookie";
+import { redirect } from "react-router-dom";
+
 const Home = () => {
   const [showSearch, setShowSearch] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,3 +35,9 @@ const Home = () => {
 };
 
 export default Home;
+
+export const loader = () => {
+  const user = Cookies.get("postIT-user");
+  if (!user) return redirect("/login");
+  return null;
+};

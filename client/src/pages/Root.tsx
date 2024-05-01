@@ -3,6 +3,8 @@ import { Header } from "../components/Header";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import DeleteAccountModal from "../components/modals/DeleteAccountModal";
 import CreatePostModal from "../components/modals/CreatePostModal";
+import Cookies from "js-cookie";
+import { redirect } from "react-router-dom";
 
 const Root = () => {
   const { isDeleteAccount } = useAppSelector((state) => state.auth);
@@ -21,3 +23,9 @@ const Root = () => {
 };
 
 export default Root;
+
+export const loader = () => {
+  const user = Cookies.get("postIT-user");
+  if (!user) return redirect("/login");
+  return null;
+};
