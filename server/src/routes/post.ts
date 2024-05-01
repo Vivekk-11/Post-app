@@ -2,7 +2,7 @@ import { Router } from "express";
 import verifyToken from "../middlewares/verifyToken";
 import { body } from "express-validator";
 import { uploadImage, validatePostImage } from "../middlewares/uploadImage";
-import { createPost } from "../controllers/post";
+import { createPost, getPosts } from "../controllers/post";
 
 const router = Router();
 
@@ -25,5 +25,7 @@ router.post(
   ],
   createPost
 );
+
+router.get("/get-posts", verifyToken, getPosts);
 
 export default router;

@@ -46,3 +46,17 @@ export const createPost: RequestHandler = async (req, res) => {
     return res.status(500).json("Something went wrong, please try again!");
   }
 };
+
+export const getPosts: RequestHandler = async (req, res) => {
+  try {
+    const { pageNo, limit } = req.query;
+    if (!pageNo || !limit) return res.status(400).json("Something went wrong!");
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .skip(+pageNo * +limit)
+      .limit(+limit);
+    return res.json(posts);
+  } catch (error) {
+    return res.status(500).json("Something went wrong, please try again!");
+  }
+};
