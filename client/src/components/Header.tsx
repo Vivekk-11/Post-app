@@ -6,7 +6,8 @@ import { CgProfile } from "react-icons/cg";
 import { CiLogout } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import useClickOutside from "../../hooks/useClickOutside";
-import { setIsDeleteAccount } from "../../redux/slices/authSlices";
+import { isDeleteAccountAction } from "../../redux/actions/authActions";
+import { isCreatePostAction } from "../../redux/actions/postActions";
 
 export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -29,13 +30,13 @@ export const Header = () => {
   };
 
   const addPost = () => {
-    // TODO: add Post
+    dispatch(isCreatePostAction(true));
   };
 
   const logoutHandler = () => {};
 
   const deleteAccountHandler = () => {
-    dispatch(setIsDeleteAccount(true));
+    dispatch(isDeleteAccountAction(true));
   };
 
   return (
