@@ -15,6 +15,8 @@ const initialState: AuthSlice = {
   deleteAccountError: null,
   updateProfileLoading: false,
   updateProfileError: null,
+  isAccountSettings: false,
+  isResetPassword: false,
 };
 
 const authSlice = createSlice({
@@ -59,10 +61,12 @@ const authSlice = createSlice({
     },
     setIsDeleteAccount: (state, { payload }: { payload: boolean }) => {
       state.isDeleteAccount = payload;
+      state.isAccountSettings = false;
     },
     setLogout: (state) => {
       state.user = null;
       Cookies.remove("postIT-user");
+      state.isAccountSettings = false;
     },
     setDeleteAccountLoading: (state) => {
       state.deleteAccountLoading = true;
@@ -101,6 +105,13 @@ const authSlice = createSlice({
       state.updateProfileLoading = false;
       state.updateProfileError = payload;
     },
+    setIsAccountSettings: (state, { payload }: { payload: boolean }) => {
+      state.isAccountSettings = payload;
+    },
+    setIsResetPassword: (state, { payload }: { payload: boolean }) => {
+      state.isResetPassword = payload;
+      state.isAccountSettings = false;
+    },
   },
 });
 
@@ -119,6 +130,8 @@ export const {
   setUpdateProfile,
   setUpdateProfileError,
   setUpdateProfileLoading,
+  setIsAccountSettings,
+  setIsResetPassword,
 } = authSlice.actions;
 
 export default authSlice.reducer;

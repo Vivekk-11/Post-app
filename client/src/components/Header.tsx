@@ -3,12 +3,11 @@ import { IoIosAdd } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ChangeEvent, useRef, useState } from "react";
 import { CgProfile } from "react-icons/cg";
-import { CiLogout } from "react-icons/ci";
-import { MdDelete } from "react-icons/md";
+import { CiSettings } from "react-icons/ci";
+import { GoLinkExternal } from "react-icons/go";
 import useClickOutside from "../../hooks/useClickOutside";
 import {
-  isDeleteAccountAction,
-  logoutAction,
+  isAccountSettingsAction,
   updateProfileAction,
 } from "../../redux/actions/authActions";
 import { isCreatePostAction } from "../../redux/actions/postActions";
@@ -42,13 +41,13 @@ export const Header = () => {
     dispatch(isCreatePostAction(true));
   };
 
-  const logoutHandler = () => {
+  const goToProfile = () => {
     if (!user) return;
-    dispatch(logoutAction(navigate));
+    navigate(`/profile/${user.userId}`);
   };
 
-  const deleteAccountHandler = () => {
-    dispatch(isDeleteAccountAction(true));
+  const handleAccountSettings = () => {
+    dispatch(isAccountSettingsAction(true));
   };
 
   return (
@@ -106,19 +105,19 @@ export const Header = () => {
                   <CgProfile /> Change Profile
                 </p>
                 <p
-                  onClick={logoutHandler}
-                  className="flex items-center gap-2 w-full hover:bg-gray-600 hover:text-gray-100 hover:rounded-lg cursor-pointer p-1 px-2"
-                >
-                  <CiLogout /> Logout
-                </p>
-                <p
                   onClick={() => {
                     setIsProfileClicked(false);
-                    deleteAccountHandler();
+                    handleAccountSettings();
                   }}
                   className="flex items-center gap-2 w-full hover:bg-gray-600 hover:text-gray-100 hover:rounded-lg cursor-pointer p-1 px-2"
                 >
-                  <MdDelete /> Delete Account
+                  <CiSettings /> Account Settings
+                </p>
+                <p
+                  onClick={goToProfile}
+                  className="flex items-center gap-2 w-full hover:bg-gray-600 hover:text-gray-100 hover:rounded-lg cursor-pointer p-1 px-2"
+                >
+                  <GoLinkExternal /> Visit Profile
                 </p>
               </div>
             )}

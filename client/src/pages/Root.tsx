@@ -5,15 +5,20 @@ import DeleteAccountModal from "../components/modals/DeleteAccountModal";
 import CreatePostModal from "../components/modals/CreatePostModal";
 import Cookies from "js-cookie";
 import { redirect } from "react-router-dom";
+import AccountSettingsModal from "../components/modals/AccountSettingsModal";
+import ResetPasswordModal from "../components/modals/ResetPasswordModal";
 
 const Root = () => {
-  const { isDeleteAccount } = useAppSelector((state) => state.auth);
+  const { isDeleteAccount, isAccountSettings, isResetPassword } =
+    useAppSelector((state) => state.auth);
   const { isCreatePost } = useAppSelector((state) => state.post);
 
   return (
     <main className="h-screen w-screen flex flex-col items-center">
       {isDeleteAccount && <DeleteAccountModal />}
       {isCreatePost && <CreatePostModal />}
+      {isAccountSettings && <AccountSettingsModal />}
+      {isResetPassword && <ResetPasswordModal />}
       <div className="w-[80%] space-y-2">
         <Header />
         <Outlet />
