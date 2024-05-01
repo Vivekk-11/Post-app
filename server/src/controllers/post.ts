@@ -54,7 +54,8 @@ export const getPosts: RequestHandler = async (req, res) => {
     const posts = await Post.find()
       .sort({ createdAt: -1 })
       .skip(+pageNo * +limit)
-      .limit(+limit);
+      .limit(+limit)
+      .populate("creator", "name email picture");
     return res.json(posts);
   } catch (error) {
     return res.status(500).json("Something went wrong, please try again!");
