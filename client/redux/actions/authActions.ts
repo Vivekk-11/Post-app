@@ -4,7 +4,6 @@ import {
   setDeleteAccount,
   setDeleteAccountError,
   setDeleteAccountLoading,
-  setIsAccountSettings,
   setIsDeleteAccount,
   setIsResetPassword,
   setLogin,
@@ -114,11 +113,6 @@ export const updateProfileAction =
     } catch (error) {
       dispatch(setUpdateProfileError("Something went wrong!"));
     }
-  };
-
-export const isAccountSettingsAction =
-  (value: boolean) => (dispatch: Dispatch) => {
-    dispatch(setIsAccountSettings(value));
   };
 
 export const isResetPasswordAction =

@@ -7,7 +7,7 @@ import { useDebounceValue } from "usehooks-ts";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { searchPostsAction } from "../../redux/actions/postActions";
 import { ClipLoader } from "react-spinners";
-import SearchPosts from "./SearchPosts";
+import SearchPosts from "../components/SearchPosts";
 
 const Home = () => {
   const [showSearch, setShowSearch] = useState(true);

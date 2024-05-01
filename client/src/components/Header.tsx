@@ -3,14 +3,15 @@ import { IoIosAdd } from "react-icons/io";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ChangeEvent, useRef, useState } from "react";
 import { CgProfile } from "react-icons/cg";
-import { CiSettings } from "react-icons/ci";
-import { GoLinkExternal } from "react-icons/go";
 import useClickOutside from "../../hooks/useClickOutside";
 import {
-  isAccountSettingsAction,
+  isDeleteAccountAction,
+  isResetPasswordAction,
+  logoutAction,
   updateProfileAction,
 } from "../../redux/actions/authActions";
 import { isCreatePostAction } from "../../redux/actions/postActions";
+import { MdDelete, MdLockReset, MdLogout } from "react-icons/md";
 
 export const Header = () => {
   const { user, updateProfileLoading } = useAppSelector((state) => state.auth);
@@ -41,13 +42,19 @@ export const Header = () => {
     dispatch(isCreatePostAction(true));
   };
 
-  const goToProfile = () => {
+  const resetPasswordHandler = () => {
     if (!user) return;
-    navigate(`/profile/${user.userId}`);
+    setIsProfileClicked(false);
+    dispatch(isResetPasswordAction(true));
   };
 
-  const handleAccountSettings = () => {
-    dispatch(isAccountSettingsAction(true));
+  const logoutHandler = () => {
+    dispatch(logoutAction(navigate));
+  };
+
+  const deleteAccountHandler = () => {
+    setIsProfileClicked(false);
+    dispatch(isDeleteAccountAction(true));
   };
 
   return (
@@ -105,19 +112,22 @@ export const Header = () => {
                   <CgProfile /> Change Profile
                 </p>
                 <p
-                  onClick={() => {
-                    setIsProfileClicked(false);
-                    handleAccountSettings();
-                  }}
+                  onClick={resetPasswordHandler}
                   className="flex items-center gap-2 w-full hover:bg-gray-600 hover:text-gray-100 hover:rounded-lg cursor-pointer p-1 px-2"
                 >
-                  <CiSettings /> Account Settings
+                  <MdLockReset /> Reset Password
                 </p>
                 <p
-                  onClick={goToProfile}
+                  onClick={logoutHandler}
                   className="flex items-center gap-2 w-full hover:bg-gray-600 hover:text-gray-100 hover:rounded-lg cursor-pointer p-1 px-2"
                 >
-                  <GoLinkExternal /> Visit Profile
+                  <MdLogout /> Logout
+                </p>
+                <p
+                  onClick={deleteAccountHandler}
+                  className="flex items-center gap-2 w-full hover:bg-gray-600 hover:text-gray-100 hover:rounded-lg cursor-pointer p-1 px-2"
+                >
+                  <MdDelete /> Delete Account
                 </p>
               </div>
             )}

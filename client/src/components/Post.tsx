@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { formatDistance } from "date-fns";
 interface Props {
   title: string;
@@ -16,7 +15,6 @@ const Post = ({
   description,
   username,
   userPicture,
-  userId,
   createdAt,
 }: Props) => {
   return (
@@ -31,16 +29,13 @@ const Post = ({
         {description}
       </p>
       <div className="flex items-center justify-between w-full">
-        <Link
-          to={`/profile/${userId}`}
-          className="flex items-center gap-x-1 text-gray-400 hover:text-gray-400 hover:opacity-70"
-        >
+        <div className="flex items-center gap-x-1 text-gray-400">
           <img
             src={userPicture}
             className="w-7 h-7 object-cover rounded-full"
           />
           <p className="text-lg">{username}</p>
-        </Link>
+        </div>
         <p className="text-xs text-muted-foreground opacity-65 font-semibold capitalize">
           {formatDistance(createdAt, new Date(), { addSuffix: true })}
         </p>
