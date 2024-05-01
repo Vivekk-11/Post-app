@@ -47,8 +47,6 @@ export const Header = () => {
     dispatch(isDeleteAccountAction(true));
   };
 
-  console.log(profilePicture, "PROFILE PICTURE");
-
   return (
     <header className="h-[3rem] w-full flex items-center justify-between">
       <Link to="/" className="flex items-center text-black hover:text-black/85">

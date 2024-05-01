@@ -11,6 +11,8 @@ const initialState: AuthSlice = {
   loginLoading: false,
   loginError: null,
   isDeleteAccount: false,
+  deleteAccountLoading: false,
+  deleteAccountError: null,
 };
 
 const authSlice = createSlice({
@@ -60,6 +62,21 @@ const authSlice = createSlice({
       state.user = null;
       Cookies.remove("postIT-user");
     },
+    setDeleteAccountLoading: (state) => {
+      state.deleteAccountLoading = true;
+      state.deleteAccountError = null;
+    },
+    setDeleteAccount: (state) => {
+      state.user = null;
+      state.deleteAccountLoading = false;
+      state.deleteAccountError = null;
+      state.isDeleteAccount = false;
+      Cookies.remove("postIT-user");
+    },
+    setDeleteAccountError: (state, { payload }: { payload: string }) => {
+      state.deleteAccountLoading = false;
+      state.deleteAccountError = payload;
+    },
   },
 });
 
@@ -72,6 +89,9 @@ export const {
   setLoginLoading,
   setIsDeleteAccount,
   setLogout,
+  setDeleteAccount,
+  setDeleteAccountError,
+  setDeleteAccountLoading,
 } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,5 +1,9 @@
 import { Dispatch } from "redux";
+import Cookies from "js-cookie";
 import {
+  setDeleteAccount,
+  setDeleteAccountError,
+  setDeleteAccountLoading,
   setIsDeleteAccount,
   setLogin,
   setLoginError,
@@ -40,7 +44,7 @@ export const loginAction =
         `${import.meta.env.VITE_APP_BACKEND_ROUTE!}/user/login`,
         loginData
       );
-      dispatch(setLogin(data));
+      dispatch(setLogin({ ...data, userId: data.id }));
       navigate("/");
     } catch (error: unknown) {
       dispatch(setLoginError("Something went wrong!"));
@@ -56,4 +60,28 @@ export const logoutAction =
   (navigate: NavigateFunction) => (dispatch: Dispatch) => {
     dispatch(setLogout());
     navigate("/login");
+  };
+
+export const deleteAccountAction =
+  (navigate: NavigateFunction) => async (dispatch: Dispatch) => {
+    try {
+      dispatch(setDeleteAccountLoading());
+      const user = Cookies.get("postIT-user");
+      if (!user) return;
+      const { userId, token } = JSON.parse(user);
+      await axios.delete(
+        `${
+          import.meta.env.VITE_APP_BACKEND_ROUTE
+        }/user/delete-account/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      navigate("/register");
+      dispatch(setDeleteAccount());
+    } catch (error) {
+      dispatch(setDeleteAccountError("Something went wrong!"));
+    }
   };
