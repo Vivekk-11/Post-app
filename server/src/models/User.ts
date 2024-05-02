@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import mongoose, { Document, Model, ObjectId } from "mongoose";
 const { Schema } = mongoose;
 
@@ -5,8 +6,11 @@ export interface IUser extends Document {
   name: string;
   email: string;
   picture: string;
-  posts: ObjectId[]; // Assuming posts are represented by an array of strings
-  password: string; // Optional password field
+  posts: ObjectId[];
+  password: string;
+  passwordResetToken: string | undefined;
+  passwordResetTokenExpire: Date | undefined;
+  createPasswordResetToken: () => void;
 }
 
 const userSchema = new Schema({
@@ -26,9 +30,21 @@ const userSchema = new Schema({
       ref: "Post",
     },
   ],
+  passwordResetToken: String,
+  passwordResetTokenExpire: Date,
 });
 
 type UserModel = Model<IUser>;
+
+userSchema.methods.createPasswordResetToken = async function () {
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(verificationToken)
+    .digest("hex");
+  this.passwordResetTokenExpire = Date.now() + 30 * 60 * 1000; //10 minutes
+  return verificationToken;
+};
 
 const User: UserModel =
   mongoose.models.User || mongoose.model<IUser>("User", userSchema);

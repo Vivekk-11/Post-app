@@ -7,6 +7,8 @@ import cloudinary from "cloudinary";
 import streamifier from "streamifier";
 import mongoose from "mongoose";
 import Post from "../models/Post";
+import crypto from "crypto";
+import sgMail from "@sendgrid/mail";
 
 export const register: RequestHandler = async (req, res) => {
   try {
@@ -184,6 +186,75 @@ export const resetPassword: RequestHandler = async (req, res) => {
     await user.save();
 
     return res.json("You successfully changed your password!");
+  } catch (error) {
+    res.status(500).json("Something went wrong, please try again!");
+  }
+};
+
+export const resetForgotPassword: RequestHandler = async (req, res) => {
+  try {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(423).json(error.array()[0].msg);
+    }
+    sgMail.setApiKey(process.env.SEND_GRID_API_KEY!);
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json("Enter your email address!");
+    }
+    if (
+      user?.passwordResetTokenExpire &&
+      user.passwordResetTokenExpire > new Date()
+    ) {
+      return res
+        .status(400)
+        .json(
+          "You can not ask us to send new email within just 10 minutes of sending an email."
+        );
+    }
+    const token = await user.createPasswordResetToken();
+    await user.save();
+    const resetUrl = `If you requested to reset your password, reset it now within 10 minutes, otherwise the token will expire. <a href=${process.env.FRONTEND_RESET_PASSWORD_LINK}/${token}>Reset Password</a>`;
+    const msg = {
+      from: process.env.EMAIL_ID,
+      to: user.email,
+      subject: "Password Reset!",
+      html: resetUrl,
+    };
+
+    //@ts-ignore
+    await sgMail.send(msg);
+    return res.json("Check your mail box!");
+  } catch (error) {
+    res.status(500).json("Something went wrong, please try again!");
+  }
+};
+
+export const resetPasswordFromEmail: RequestHandler = async (req, res) => {
+  try {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(423).json(error.array()[0].msg);
+    }
+    const { token, password } = req.body;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({ passwordResetToken: hashedToken });
+    if (!user) {
+      return res.status(401).json("Something went wrong!");
+    }
+    if (
+      user?.passwordResetTokenExpire &&
+      user.passwordResetTokenExpire < new Date()
+    ) {
+      return res.status(401).json("Token is expired, try again later.");
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.passwordResetToken = undefined;
+    user.passwordResetTokenExpire = undefined;
+    await user.save();
+    return res.json("Password changed successfully!");
   } catch (error) {
     res.status(500).json("Something went wrong, please try again!");
   }

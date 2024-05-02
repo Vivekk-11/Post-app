@@ -5,6 +5,8 @@ import {
   updateProfile,
   deleteAccount,
   resetPassword,
+  resetForgotPassword,
+  resetPasswordFromEmail,
 } from "../controllers/user";
 import { body } from "express-validator";
 import {
@@ -59,6 +61,29 @@ router.put(
     .isLength({ min: 8, max: 30 })
     .withMessage("Password must contain at least 8 characters."),
   resetPassword
+);
+
+router.post(
+  "/reset-password",
+  body("email").trim().isEmail().withMessage("Enter a valid email address."),
+  resetForgotPassword
+);
+
+router.post(
+  "/reset-password-from-email",
+  [
+    body("password")
+      .trim()
+      .isString()
+      .isLength({ min: 8, max: 30 })
+      .withMessage("Password must contain at least 8 characters."),
+    body("token")
+      .trim()
+      .isString()
+      .isLength({ min: 1 })
+      .withMessage("Something went wrong!"),
+  ],
+  resetPasswordFromEmail
 );
 
 router.delete("/delete-account/:userId", verifyToken, deleteAccount);
