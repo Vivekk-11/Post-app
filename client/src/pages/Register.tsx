@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { registerAction } from "../../redux/actions/authActions";
 import { CgProfile } from "react-icons/cg";
 import { MdCancel } from "react-icons/md";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +17,8 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [profileImage, setProfileImage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { registerLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -117,35 +120,73 @@ const Register = () => {
               />
             </div>
             <div className="flex flex-col items-start gap-1 w-full">
-              <input
-                className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
-                type="password"
-                onChange={(event) => {
-                  if (registerLoading) return;
-                  setPasswordError("");
-                  setPassword(event.target.value);
-                }}
-                value={password}
-                placeholder="Password"
-                required
-              />
+              <div className="w-full relative">
+                <input
+                  className="pr-9 outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+                  type={showPassword ? "text" : "password"}
+                  onChange={(event) => {
+                    if (registerLoading) return;
+                    setPasswordError("");
+                    setPassword(event.target.value);
+                  }}
+                  value={password}
+                  placeholder="Password"
+                  required
+                />
+                {!showPassword ? (
+                  <IoEye
+                    onClick={() => {
+                      if (registerLoading) return;
+                      setShowPassword(true);
+                    }}
+                    className="cursor-pointer text-gray-600 text-2xl absolute right-2 top-1/2 -translate-y-[50%]"
+                  />
+                ) : (
+                  <IoEyeOff
+                    onClick={() => {
+                      if (registerLoading) return;
+                      setShowPassword(false);
+                    }}
+                    className="cursor-pointer text-gray-600 text-2xl absolute right-2 top-1/2 -translate-y-[50%]"
+                  />
+                )}
+              </div>
               {passwordError && (
                 <p className="text-red-500 font-bold">{passwordError}</p>
               )}
             </div>
             <div className="flex flex-col items-start gap-1 w-full">
-              <input
-                className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
-                type="password"
-                onChange={(event) => {
-                  if (registerLoading) return;
-                  setConfirmPasswordError("");
-                  setConfirmPassword(event.target.value);
-                }}
-                value={confirmPassword}
-                placeholder="Confirm Password"
-                required
-              />
+              <div className="w-full relative">
+                <input
+                  className="pr-9 outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+                  type={showConfirmPassword ? "text" : "password"}
+                  onChange={(event) => {
+                    if (registerLoading) return;
+                    setConfirmPasswordError("");
+                    setConfirmPassword(event.target.value);
+                  }}
+                  value={confirmPassword}
+                  placeholder="Confirm Password"
+                  required
+                />
+                {!showConfirmPassword ? (
+                  <IoEye
+                    onClick={() => {
+                      if (registerLoading) return;
+                      setShowConfirmPassword(true);
+                    }}
+                    className="cursor-pointer text-gray-600 text-2xl absolute right-2 top-1/2 -translate-y-[50%]"
+                  />
+                ) : (
+                  <IoEyeOff
+                    onClick={() => {
+                      if (registerLoading) return;
+                      setShowConfirmPassword(false);
+                    }}
+                    className="cursor-pointer text-gray-600 text-2xl absolute right-2 top-1/2 -translate-y-[50%]"
+                  />
+                )}
+              </div>
               {confirmPasswordError && (
                 <p className="text-red-500 font-bold">{confirmPasswordError}</p>
               )}

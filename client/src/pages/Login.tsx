@@ -3,12 +3,14 @@ import { FormEvent, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { loginAction } from "../../redux/actions/authActions";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { loginLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -75,18 +77,37 @@ const Login = () => {
                 />
               </div>
               <div className="flex flex-col items-start gap-1 w-full">
-                <input
-                  className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
-                  type="password"
-                  onChange={(event) => {
-                    if (loginLoading) return;
-                    setPasswordError("");
-                    setPassword(event.target.value);
-                  }}
-                  value={password}
-                  placeholder="Password"
-                  required
-                />
+                <div className="w-full relative">
+                  <input
+                    className="pr-9 outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+                    type={showPassword ? "text" : "password"}
+                    onChange={(event) => {
+                      if (loginLoading) return;
+                      setPasswordError("");
+                      setPassword(event.target.value);
+                    }}
+                    value={password}
+                    placeholder="Password"
+                    required
+                  />
+                  {!showPassword ? (
+                    <IoEye
+                      onClick={() => {
+                        if (loginLoading) return;
+                        setShowPassword(true);
+                      }}
+                      className="cursor-pointer text-gray-600 text-2xl absolute right-2 top-1/2 -translate-y-[50%]"
+                    />
+                  ) : (
+                    <IoEyeOff
+                      onClick={() => {
+                        if (loginLoading) return;
+                        setShowPassword(false);
+                      }}
+                      className="cursor-pointer text-gray-600 text-2xl absolute right-2 top-1/2 -translate-y-[50%]"
+                    />
+                  )}
+                </div>
                 {passwordError && (
                   <p className="text-red-500 font-bold">{passwordError}</p>
                 )}
