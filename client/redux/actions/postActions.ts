@@ -13,6 +13,7 @@ import {
   setSearchPostsLoading,
 } from "../slices/postSlices";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const isCreatePostAction = (value: boolean) => (dispatch: Dispatch) => {
   dispatch(setIsCreatePost(value));
@@ -35,8 +36,12 @@ export const createPostAction =
         }
       );
       dispatch(setCreatePost(data));
+      toast.success("You successfully created the post!");
     } catch (error) {
-      dispatch(setCreatePostError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setCreatePostError(err));
     }
   };
 
@@ -81,6 +86,8 @@ export const searchPostsAction =
       );
       dispatch(setSearchPosts(data));
     } catch (error) {
-      dispatch(setSearchPostsError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      dispatch(setSearchPostsError(err));
     }
   };

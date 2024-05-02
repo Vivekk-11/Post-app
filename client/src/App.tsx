@@ -8,6 +8,7 @@ import AskForEmail, { loader as askForEmailLoader } from "./pages/AskForEmail";
 import ResetPasswordFromEmail, {
   loader as resetPasswordLoader,
 } from "./pages/ResetPasswordFromEmail";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   { path: "/register", element: <Register />, loader: registerLoader },
@@ -31,7 +32,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />;
+      <Toaster />
+    </>
+  );
 }
 
 export default App;

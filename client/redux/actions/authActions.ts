@@ -28,6 +28,7 @@ import {
 } from "../slices/authSlices";
 import axios from "axios";
 import { NavigateFunction } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export const registerAction =
   (registerData: FormData, navigate: NavigateFunction) =>
@@ -40,8 +41,12 @@ export const registerAction =
       );
       dispatch(setRegister(data));
       navigate("/");
+      toast.success("Welcome to PostIT");
     } catch (error: unknown) {
-      dispatch(setRegisterError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setRegisterError(err));
     }
   };
 
@@ -59,8 +64,12 @@ export const loginAction =
       );
       dispatch(setLogin({ ...data, userId: data.id }));
       navigate("/");
+      toast.success("Welcome to PostIT");
     } catch (error: unknown) {
-      dispatch(setLoginError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setLoginError(err));
     }
   };
 
@@ -72,6 +81,7 @@ export const isDeleteAccountAction =
 export const logoutAction =
   (navigate: NavigateFunction) => (dispatch: Dispatch) => {
     dispatch(setLogout());
+    toast.success("Logout successful!");
     navigate("/login");
   };
 
@@ -94,8 +104,12 @@ export const deleteAccountAction =
       );
       navigate("/register");
       dispatch(setDeleteAccount());
+      toast.success("You deleted your account!");
     } catch (error) {
-      dispatch(setDeleteAccountError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setDeleteAccountError(err));
     }
   };
 
@@ -115,9 +129,13 @@ export const updateProfileAction =
           },
         }
       );
+      toast.success("Profile picture updated!");
       dispatch(setUpdateProfile(data));
     } catch (error) {
-      dispatch(setUpdateProfileError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setUpdateProfileError(err));
     }
   };
 
@@ -142,9 +160,13 @@ export const resetPasswordAction =
           },
         }
       );
+      toast.success("You successfully reset your password!");
       dispatch(setResetPassword());
     } catch (error) {
-      dispatch(setResetPasswordError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setResetPasswordError(err));
     }
   };
 
@@ -158,9 +180,13 @@ export const askForEmailAction =
           email,
         }
       );
+      toast.success("We've sent you an email!");
       dispatch(setAskForEmail());
     } catch (error) {
-      dispatch(setAskForEmailError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setAskForEmailError(err));
     }
   };
 
@@ -182,10 +208,12 @@ export const passwordResetAction =
         }
       );
       dispatch(setPasswordReset());
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      toast.success("You successfully changed your password!");
+      navigate("/login");
     } catch (error) {
-      dispatch(setPasswordResetError("Something went wrong!"));
+      //@ts-expect-error ignore typescript
+      const err = error?.response?.data || "Something went wrong!";
+      toast.error(err);
+      dispatch(setPasswordResetError(err));
     }
   };
