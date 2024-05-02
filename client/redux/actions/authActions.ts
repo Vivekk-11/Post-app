@@ -13,6 +13,9 @@ import {
   setLoginError,
   setLoginLoading,
   setLogout,
+  setPasswordReset,
+  setPasswordResetError,
+  setPasswordResetLoading,
   setRegister,
   setRegisterError,
   setRegisterLoading,
@@ -158,5 +161,31 @@ export const askForEmailAction =
       dispatch(setAskForEmail());
     } catch (error) {
       dispatch(setAskForEmailError("Something went wrong!"));
+    }
+  };
+
+export const passwordResetAction =
+  (
+    { password, token }: { password: string; token: string },
+    navigate: NavigateFunction
+  ) =>
+  async (dispatch: Dispatch) => {
+    try {
+      dispatch(setPasswordResetLoading());
+      await axios.post(
+        `${
+          import.meta.env.VITE_APP_BACKEND_ROUTE
+        }/user/reset-password-from-email`,
+        {
+          password,
+          token,
+        }
+      );
+      dispatch(setPasswordReset());
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      dispatch(setPasswordResetError("Something went wrong!"));
     }
   };

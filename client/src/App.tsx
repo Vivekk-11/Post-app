@@ -5,6 +5,9 @@ import Login, { loader as loginLoader } from "./pages/Login";
 import Home, { loader as homeLoader } from "./pages/Home";
 import Root, { loader as rootLoader } from "./pages/Root";
 import AskForEmail, { loader as askForEmailLoader } from "./pages/AskForEmail";
+import ResetPasswordFromEmail, {
+  loader as resetPasswordLoader,
+} from "./pages/ResetPasswordFromEmail";
 
 const router = createBrowserRouter([
   { path: "/register", element: <Register />, loader: registerLoader },
@@ -13,6 +16,11 @@ const router = createBrowserRouter([
     path: "/ask-for-email",
     element: <AskForEmail />,
     loader: askForEmailLoader,
+  },
+  {
+    path: "/reset-password-from-email/:token",
+    element: <ResetPasswordFromEmail />,
+    loader: resetPasswordLoader,
   },
   {
     path: "/",

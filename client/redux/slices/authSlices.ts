@@ -20,6 +20,8 @@ const initialState: AuthSlice = {
   resetPasswordError: null,
   askForEmailLoading: false,
   askForEmailError: null,
+  passwordResetLoading: false,
+  passwordResetError: null,
 };
 
 const authSlice = createSlice({
@@ -134,6 +136,18 @@ const authSlice = createSlice({
       state.askForEmailLoading = false;
       state.askForEmailError = payload;
     },
+    setPasswordResetLoading: (state) => {
+      state.passwordResetLoading = true;
+      state.passwordResetError = null;
+    },
+    setPasswordReset: (state) => {
+      state.passwordResetLoading = false;
+      state.passwordResetError = null;
+    },
+    setPasswordResetError: (state, { payload }: { payload: string }) => {
+      state.passwordResetError = payload;
+      state.passwordResetLoading = false;
+    },
   },
 });
 
@@ -159,6 +173,9 @@ export const {
   setAskForEmail,
   setAskForEmailError,
   setAskForEmailLoading,
+  setPasswordReset,
+  setPasswordResetError,
+  setPasswordResetLoading,
 } = authSlice.actions;
 
 export default authSlice.reducer;
