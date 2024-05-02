@@ -30,6 +30,7 @@ const postSlice = createSlice({
       state.createPostError = null;
       state.isCreatePost = false;
       state.posts = [payload, ...state.posts];
+      state.postsCount = state.postsCount + 1;
     },
     setCreatePostError: (state, { payload }: { payload: string }) => {
       state.createPostLoading = false;
