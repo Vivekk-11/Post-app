@@ -12,7 +12,7 @@ const SearchPosts = ({ posts, searchTerm }: Props) => {
       <h1 className="text-3xl font-bold">
         Posts with the term "{searchTerm}":
       </h1>
-      <div className="w-full grid grid-cols-4 gap-3 my-5 mx-3 tab:gap-5 tab:grid-cols-3 xs:grid xs:grid-cols-1 xs:grid-rows-3">
+      <div className="w-full grid grid-cols-4 gap-3 my-5 mx-3 tab:gap-5 tab:grid-cols-3 mobile:grid mobile:grid-cols-1 mobile:grid-rows-3">
         {posts.map((post) => (
           <Post
             key={post._id}

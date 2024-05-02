@@ -63,9 +63,9 @@ export const Header = () => {
         <img
           src="/header-logo.webp"
           alt="LOGO"
-          className="h-12 w-12 object-cover"
+          className="h-12 w-12 mobile:h-8 mobile:w-8 object-cover"
         />
-        <h3 className="text-2xl font-extrabold">PostIT</h3>
+        <h3 className="text-2xl mobile:text-xl font-extrabold">PostIT</h3>
       </Link>
       {user && (
         <div className="flex items-center gap-x-10">
@@ -97,7 +97,7 @@ export const Header = () => {
               }`}
             />
             {isProfileClicked && (
-              <div className="bg-white w-44 shadow-lg px-2 py-2 z-20 absolute top-12 -left-3 flex flex-col items-start justify-start gap-1">
+              <div className="bg-white w-44 shadow-lg px-2 py-2 z-20 absolute top-12 -left-3 mobile:-left-28 tab:-left-20 flex flex-col items-start justify-start gap-1">
                 <input
                   accept=".jpg, .jpeg, .png"
                   onChange={changeImageHandler}

@@ -3,8 +3,20 @@ import ReactDOM from "react-dom";
 import classes from "./modal.module.css";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 
-const Modal = ({ children }: { children: React.ReactNode }) => {
-  return <div className={classes.modal}>{children}</div>;
+const Modal = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div
+      className={`${classes.modal} ${className} mobile:rounded-md mobile:fixed tab:rounded-md`}
+    >
+      {children}
+    </div>
+  );
 };
 
 const Overlay = ({ onClose }: { onClose: () => void }) => {
@@ -14,15 +26,17 @@ const Overlay = ({ onClose }: { onClose: () => void }) => {
 const ModalOverlay = ({
   children,
   onClose,
+  className,
 }: {
   children: React.ReactNode;
   onClose: () => void;
+  className?: string;
 }) => {
   const { createPostLoading } = useAppSelector((state) => state.post);
   return (
     <Fragment>
       {ReactDOM.createPortal(
-        <Modal>{children}</Modal>,
+        <Modal className={className}>{children}</Modal>,
         //@ts-expect-error below line might throw an error
         document.getElementById("modal")
       )}

@@ -37,7 +37,7 @@ const ResetPasswordModal = () => {
   };
 
   return (
-    <ModalOverlay onClose={closeModal}>
+    <ModalOverlay onClose={closeModal} className="tab:top-[30vh]">
       <div
         className={`flex flex-col gap-y-8 ${
           resetPasswordLoading ? "opacity-65" : "opacity-100"
@@ -51,9 +51,9 @@ const ResetPasswordModal = () => {
           <p className="text-lg text-gray-400">Please set a strong password.</p>
         </div>
         <div className="flex flex-col w-full gap-y-5">
-          <div className="flex flex-col items-start gap-1 w-[70%]">
+          <div className="flex flex-col items-start gap-1 w-[70%] mobile:w-full">
             <input
-              className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+              className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg mobile:w-full"
               type="password"
               onChange={(event) => {
                 if (resetPasswordLoading) return;
@@ -68,9 +68,9 @@ const ResetPasswordModal = () => {
               <p className="text-red-500 font-bold">{passwordError}</p>
             )}
           </div>
-          <div className="flex flex-col items-start gap-1 w-[70%]">
+          <div className="flex flex-col items-start gap-1 w-[70%] mobile:w-full">
             <input
-              className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg"
+              className="outline-none w-full bg-gray-300 py-3 p-4 placeholder:text-gray-600 text-lg placeholder:font-bold rounded-lg mobile:w-full"
               type="password"
               onChange={(event) => {
                 if (resetPasswordLoading) return;

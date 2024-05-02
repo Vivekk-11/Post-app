@@ -32,19 +32,18 @@
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 850px) {
   .modal {
-    top: 10vh;
+    top: 20vh;
     width: 25rem;
     left: calc(50% - 12.5rem);
-    overflow-y: scroll;
   }
 }
 
 @media screen and (max-width: 475px) {
   .modal {
     position: absolute;
-    top: 5vh;
+    top: 10vh;
     width: 19rem;
     left: calc(50% - 9.5rem);
     overflow-y: scroll;

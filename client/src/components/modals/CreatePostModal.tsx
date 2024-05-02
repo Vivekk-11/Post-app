@@ -68,7 +68,7 @@ const CreatePostModal = () => {
       >{`Add Post`}</h1>
       <form
         onSubmit={handleSubmit}
-        className={`tab:h-full tab:overflow-y-scroll overflow-x-hidden flex flex-col gap-2 justify-center items-center my-2 ${
+        className={`tab:h-full  overflow-x-hidden flex flex-col gap-2 justify-center items-center my-2 ${
           createPostLoading ? "opacity-65" : "opacity-100"
         }`}
       >
@@ -156,7 +156,7 @@ const CreatePostModal = () => {
             )}
           </div>
         </div>
-        <div className="self-start flex flex-col items-start w-1/2 relative">
+        <div className="self-start flex flex-col items-start w-1/2 relative tab:w-72">
           {titleError && (
             <p className="text-xl font-bold text-red-700 self-start absolute -top-1 right-0">
               {titleError}

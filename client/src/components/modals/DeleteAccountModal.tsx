@@ -22,7 +22,7 @@ const DeleteAccountModal = () => {
     dispatch(deleteAccountAction(navigate));
   };
   return (
-    <ModalOverlay onClose={closeModal}>
+    <ModalOverlay onClose={closeModal} className="tab:top-[30vh]">
       <div
         className={`flex flex-col gap-4 opacity-100 ${
           deleteAccountLoading ? "opacity-65" : "opacity-100"

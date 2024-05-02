@@ -62,7 +62,7 @@ const Register = () => {
 
   return (
     <div
-      className={`h-screen w-screen flex flex-col items-center justify-center`}
+      className={`h-screen w-screen flex flex-col items-center justify-center overflow-x-hidden`}
     >
       <div
         className={`p-8 shadow-lg gap-2 w-[25rem] ${
@@ -152,9 +152,8 @@ const Register = () => {
             </div>
             <div className="self-start mx-2 relative">
               {!profileImage && (
-                <label
-                  htmlFor="file-upload"
-                  className="flex items-center gap-x-2 text-sm font-semibold cursor-pointer"
+                <button
+                  className="flex items-center gap-x-2 text-sm font-semibold cursor-pointer bg-transparent"
                   onClick={() => {
                     if (registerLoading) return;
                     inputRef.current?.click();
@@ -162,7 +161,7 @@ const Register = () => {
                 >
                   <CgProfile size={20} />
                   Upload Profile Photo
-                </label>
+                </button>
               )}
               {profileImage && (
                 <>

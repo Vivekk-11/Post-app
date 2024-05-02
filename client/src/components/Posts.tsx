@@ -70,7 +70,7 @@ const Posts = () => {
         isStart={isStart}
         reachedToEnd={reachedToEnd}
       />
-      <div className="grid grid-cols-4 gap-3 my-5 mx-3 tab:gap-5 tab:grid-cols-3 xs:grid xs:grid-cols-1 xs:grid-rows-3">
+      <div className="grid grid-cols-4 gap-3 my-5 mx-3 tab:gap-5 tab:grid-cols-2 tab:grid-rows-3 mobile:w-full mobile:grid mobile:grid-cols-1 mobile:grid-rows-3">
         {posts.slice(0, postsLimit).map((post) => (
           <Post
             key={post._id}
