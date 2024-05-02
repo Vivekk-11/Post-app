@@ -1,6 +1,9 @@
 import { Dispatch } from "redux";
 import Cookies from "js-cookie";
 import {
+  setAskForEmail,
+  setAskForEmailError,
+  setAskForEmailLoading,
   setDeleteAccount,
   setDeleteAccountError,
   setDeleteAccountLoading,
@@ -139,5 +142,21 @@ export const resetPasswordAction =
       dispatch(setResetPassword());
     } catch (error) {
       dispatch(setResetPasswordError("Something went wrong!"));
+    }
+  };
+
+export const askForEmailAction =
+  (email: string) => async (dispatch: Dispatch) => {
+    try {
+      dispatch(setAskForEmailLoading());
+      await axios.post(
+        `${import.meta.env.VITE_APP_BACKEND_ROUTE}/user/reset-password`,
+        {
+          email,
+        }
+      );
+      dispatch(setAskForEmail());
+    } catch (error) {
+      dispatch(setAskForEmailError("Something went wrong!"));
     }
   };

@@ -207,11 +207,7 @@ export const resetForgotPassword: RequestHandler = async (req, res) => {
       user?.passwordResetTokenExpire &&
       user.passwordResetTokenExpire > new Date()
     ) {
-      return res
-        .status(400)
-        .json(
-          "You can not ask us to send new email within just 10 minutes of sending an email."
-        );
+      return res.status(400).json("We've already sent you an email!");
     }
     const token = await user.createPasswordResetToken();
     await user.save();

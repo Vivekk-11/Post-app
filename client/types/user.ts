@@ -21,4 +21,6 @@ export interface AuthSlice {
   isResetPassword: boolean;
   resetPasswordLoading: boolean;
   resetPasswordError: null | string;
+  askForEmailLoading: boolean;
+  askForEmailError: null | string;
 }

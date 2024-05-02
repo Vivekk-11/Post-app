@@ -102,6 +102,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        <Link
+          to="/ask-for-email"
+          className="mr-auto font-semibold text-blue-700 hover:opacity-65"
+        >
+          Forgot Password?
+        </Link>
         <p className="text-gray-600 font-semibold">
           Don't have an account?{" "}
           <Link to="/register" className="text-blue-600 font-bold">
