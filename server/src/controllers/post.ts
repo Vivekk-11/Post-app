@@ -1,10 +1,32 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import Post from "../models/Post";
 import { v2 } from "cloudinary";
 import { createReadStream } from "streamifier";
+import { ObjectId } from "mongoose";
+import { Readable } from "node:stream";
 
-export const createPost: RequestHandler = async (req, res) => {
+interface CustomFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+  stream: Readable; // Include stream property
+  destination: string; // Include destination property
+  filename: string; // Include filename property
+  path: string;
+}
+
+interface CustomRequest extends Request {
+  file?: CustomFile;
+  user?: {
+    id: ObjectId;
+  };
+}
+
+export const createPost = async (req: CustomRequest, res: Response) => {
   try {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -15,7 +37,6 @@ export const createPost: RequestHandler = async (req, res) => {
     const { title, description } = req.body;
     //@ts-ignore
     const userId = req.user.id;
-    //@ts-ignore
 
     const bufferStream = createReadStream(req.file.buffer);
     const uploadStream = v2.uploader.upload_stream(

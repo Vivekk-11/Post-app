@@ -1,8 +1,34 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Request, Response, NextFunction } from "express";
 
 import jwt from "jsonwebtoken";
+import { ObjectId } from "mongoose";
+import { Readable } from "node:stream";
 
-const verifyToken: RequestHandler = async (req, res, next) => {
+interface CustomFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+  stream: Readable; // Include stream property
+  destination: string; // Include destination property
+  filename: string; // Include filename property
+  path: string;
+}
+
+interface CustomRequest extends Request {
+  file?: CustomFile;
+  user?: {
+    id: ObjectId;
+  };
+}
+
+const verifyToken = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     let token = req.headers.authorization;
     if (!token) return res.status(401).json("Authentication Failed!");
@@ -13,7 +39,6 @@ const verifyToken: RequestHandler = async (req, res, next) => {
       process.env.JWT_SECRET!,
       async (err: any, tokenData: any) => {
         if (err) return res.status(401).json("Authentication Failed!");
-        //@ts-ignore
         req.user = { ...tokenData };
         next();
       }

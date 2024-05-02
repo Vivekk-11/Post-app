@@ -14,9 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 cloudinary.v2.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
-  api_key: process.env.CLOUDINARY_API_KEY!,
-  api_secret: process.env.CLOUDINARY_SECRET_KEY!,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
   secure: true,
 });
 
@@ -30,7 +30,7 @@ app.listen(PORT, () => {
 });
 
 mongoose
-  .connect(process.env.MONGO_URL!)
+  .connect(process.env.MONGO_URL as string)
   .then(() => {
     console.log("Database connected!");
   })

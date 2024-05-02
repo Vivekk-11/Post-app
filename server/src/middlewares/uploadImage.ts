@@ -1,9 +1,26 @@
-import { RequestHandler } from "express";
-const multer = require("multer");
+import { RequestHandler, Request } from "express";
+import { Readable } from "node:stream";
+import multer, { FileFilterCallback } from "multer";
 const storage = multer.memoryStorage();
 
-//@ts-ignore
-const imageFileFilter = (req, file, cb) => {
+interface CustomFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+  stream: Readable; // Include stream property
+  destination: string; // Include destination property
+  filename: string; // Include filename property
+  path: string;
+}
+
+const imageFileFilter = (
+  req: Request,
+  file: CustomFile,
+  cb: FileFilterCallback
+) => {
   cb(null, true);
 };
 

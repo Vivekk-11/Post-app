@@ -1,16 +1,37 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Request, Response } from "express";
+import { Readable } from "node:stream";
 import { validationResult } from "express-validator";
 import User, { IUser } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "cloudinary";
 import streamifier from "streamifier";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import Post from "../models/Post";
 import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 
-export const register: RequestHandler = async (req, res) => {
+interface CustomFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+  stream: Readable; // Include stream property
+  destination: string; // Include destination property
+  filename: string; // Include filename property
+  path: string;
+}
+
+interface CustomRequest extends Request {
+  file?: CustomFile;
+  user?: {
+    id: ObjectId;
+  };
+}
+
+export const register = async (req: CustomRequest, res: Response) => {
   try {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -105,13 +126,12 @@ export const login: RequestHandler = async (req, res) => {
   }
 };
 
-export const updateProfile: RequestHandler = async (req, res) => {
+export const updateProfile = async (req: CustomRequest, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json("Please provide an image!");
     }
 
-    //@ts-ignore
     const user: IUser | null = await User.findById(req?.user?.id);
     if (!user) return res.status(401).json("Unauthorized!");
     const bufferStream = streamifier.createReadStream(req.file.buffer);
@@ -140,15 +160,16 @@ export const updateProfile: RequestHandler = async (req, res) => {
   }
 };
 
-export const deleteAccount: RequestHandler = async (req, res) => {
+export const deleteAccount = async (req: CustomRequest, res: Response) => {
   try {
     const { userId } = req.params;
 
-    //@ts-ignore
-    if (userId.toString() !== req.user.id.toString()) {
-      return res
-        .status(401)
-        .json("You are not authorized to delete this account!");
+    if (req?.user) {
+      if (userId.toString() !== req.user.id.toString()) {
+        return res
+          .status(401)
+          .json("You are not authorized to delete this account!");
+      }
     }
 
     const user = await User.findById(userId);
@@ -167,13 +188,13 @@ export const deleteAccount: RequestHandler = async (req, res) => {
   }
 };
 
-export const resetPassword: RequestHandler = async (req, res) => {
+export const resetPassword = async (req: CustomRequest, res: Response) => {
   try {
     const error = validationResult(req);
     if (!error.isEmpty()) {
       return res.status(423).json(error.array()[0].msg);
     }
-    //@ts-ignore
+    if (!req?.user) return res.status(401).json("Unauthorized!");
     const user = await User.findById(req.user.id);
 
     if (!user) return res.status(401).json("Unauthorized!");
@@ -213,13 +234,12 @@ export const resetForgotPassword: RequestHandler = async (req, res) => {
     await user.save();
     const resetUrl = `If you requested to reset your password, reset it now within 10 minutes, otherwise the token will expire. <a href=${process.env.FRONTEND_RESET_PASSWORD_LINK}/${token}>Reset Password</a>`;
     const msg = {
-      from: process.env.EMAIL_ID,
+      from: process.env.EMAIL_ID! as string,
       to: user.email,
       subject: "Password Reset!",
       html: resetUrl,
     };
 
-    //@ts-ignore
     await sgMail.send(msg);
     return res.json("Check your mail box!");
   } catch (error) {
